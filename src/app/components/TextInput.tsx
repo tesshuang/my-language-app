@@ -1,15 +1,12 @@
-import {
-  FormControl,
-  FormLabel,
-  Textarea,
-  Text,
-  Box,
-  Flex,
-} from "@chakra-ui/react";
+import { FormControl, FormLabel, Textarea, Flex } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
-export const TextInput = (props: { name?: string; isEditable?: boolean }) => {
-  const { name, isEditable = false } = props;
+export const TextInput = (props: {
+  name: string;
+  text: string;
+  setText: (text: string) => void;
+}) => {
+  const { name, text, setText } = props;
 
   return (
     <div>
@@ -17,15 +14,18 @@ export const TextInput = (props: { name?: string; isEditable?: boolean }) => {
         <FormLabel fontSize="xl" m={0}>
           {name}
         </FormLabel>
-        {isEditable ? (
-          <Flex>
-            <Textarea
-              placeholder="Enter your text"
-              border="none"
-              py={2}
-              px={0}
-              flex="1"
-            />
+        <Flex>
+          <Textarea
+            placeholder="Enter your text"
+            border="none"
+            py={2}
+            px={0}
+            flex="1"
+            resize="none"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          {Boolean(text) && (
             <CloseIcon
               mt={2}
               boxSize={5}
@@ -35,15 +35,10 @@ export const TextInput = (props: { name?: string; isEditable?: boolean }) => {
               borderRadius="50%"
               p={1}
               aria-label="reset text input"
+              onClick={() => setText("")}
             />
-          </Flex>
-        ) : (
-          <Box minHeight={20}>
-            <Text fontSize="md" color="gray.500" py={2}>
-              Translation
-            </Text>
-          </Box>
-        )}
+          )}
+        </Flex>
       </FormControl>
     </div>
   );
