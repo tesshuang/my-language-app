@@ -1,5 +1,12 @@
-import { FormControl, FormLabel, Textarea, Flex } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Textarea,
+  Flex,
+  HStack,
+} from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
+import { PlayIcon } from "./PlayIcon";
 
 export const TextInput = (props: {
   name: string;
@@ -26,17 +33,19 @@ export const TextInput = (props: {
             onChange={(e) => setText(e.target.value)}
           />
           {Boolean(text) && (
-            <CloseIcon
-              mt={2}
-              boxSize={5}
-              focusable={true}
-              bgColor="gray.400"
-              color="gray.100"
-              borderRadius="50%"
-              p={1}
-              aria-label="reset text input"
-              onClick={() => setText("")}
-            />
+            <HStack mt={2} spacing="8px" alignItems="flex-start">
+              <CloseIcon
+                boxSize={5}
+                focusable={true}
+                bgColor="gray.500"
+                color="gray.100"
+                borderRadius="50%"
+                p={1}
+                aria-label="reset text input"
+                onClick={() => setText("")}
+              />
+              <PlayIcon />
+            </HStack>
           )}
         </Flex>
       </FormControl>

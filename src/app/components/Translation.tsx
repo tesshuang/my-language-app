@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Box, AbsoluteCenter, Text } from "@chakra-ui/react";
+import { Box, AbsoluteCenter } from "@chakra-ui/react";
 import { TextInput } from "./TextInput";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
@@ -37,7 +37,7 @@ export const Translation = () => {
         />
       </AbsoluteCenter>
       <Box p={1} />
-      <TextResult name={lang.output} />
+      <TextResult name={lang.output} result="" />
     </Box>
   );
 };
