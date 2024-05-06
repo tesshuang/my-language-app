@@ -4,8 +4,14 @@ import { Box, AbsoluteCenter } from "@chakra-ui/react";
 import { TextInput } from "./TextInput";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
+import { Favorite } from "../page";
 
-export const Translation = () => {
+export const Translation = (props: {
+  words: Favorite[];
+  setAllWords: (words: Favorite[]) => void;
+}) => {
+  const { setAllWords, words } = props;
+
   const [text, setText] = useState("");
   const [lang, setLang] = useState({
     input: "French",
@@ -37,7 +43,15 @@ export const Translation = () => {
         />
       </AbsoluteCenter>
       <Box p={1} />
-      <TextResult name={lang.output} result="" />
+      <TextResult
+        name={lang.output}
+        inputLang={lang.input}
+        result=""
+        userInput={text}
+        words={words}
+        setAllWords={setAllWords}
+        setText={setText}
+      />
     </Box>
   );
 };
