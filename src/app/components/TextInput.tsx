@@ -12,8 +12,9 @@ export const TextInput = (props: {
   name: string;
   text: string;
   setText: (text: string) => void;
+  handleTextInput: (value: string) => void;
 }) => {
-  const { name, text, setText } = props;
+  const { name, text, setText, handleTextInput } = props;
 
   return (
     <div>
@@ -30,7 +31,9 @@ export const TextInput = (props: {
             flex="1"
             resize="none"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              handleTextInput(e.target.value);
+            }}
           />
           {Boolean(text) && (
             <HStack mt={2} spacing="8px" alignItems="flex-start">

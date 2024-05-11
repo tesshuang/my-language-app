@@ -1,7 +1,7 @@
 import { Text, Box, Flex } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
-import { Favorite } from "../page";
+import { Favorite } from "./TranslateHome";
 
 let id = 0;
 
@@ -33,7 +33,6 @@ export const TextResult = (props: {
       ...words,
     ]);
     setText("");
-    console.log("id", id);
   };
 
   return (

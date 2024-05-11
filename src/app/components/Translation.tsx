@@ -4,7 +4,9 @@ import { Box, AbsoluteCenter } from "@chakra-ui/react";
 import { TextInput } from "./TextInput";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
-import { Favorite } from "../page";
+import { Favorite } from "./TranslateHome";
+import { translateText } from "../utils/translate-api";
+import { useDebounce } from "../utils/hooks";
 
 export const Translation = (props: {
   words: Favorite[];
@@ -17,6 +19,7 @@ export const Translation = (props: {
     input: "French",
     output: "English",
   });
+  const [isTranslating, setIsTranslating] = useState(false);
 
   const handleSwitchLang = () => {
     const tempInput = lang.input;
@@ -27,9 +30,38 @@ export const Translation = (props: {
     });
   };
 
+  const handleTranslate = async () => {
+    console.log("sending request to translation api:", text);
+    setIsTranslating(true);
+    setTimeout(() => {
+      console.log("translation is done!");
+      setIsTranslating(false);
+    }, 1000);
+    // try {
+    //   const text = "Hello world in local env.";
+    //   const translation = await translateText(text);
+    //   console.log("translation", translation);
+    // } catch (e) {
+    //   console.error(e);
+    // }
+  };
+
+  const debouncedOnChange = useDebounce(handleTranslate);
+
+  const handleTextInput = (value: string) => {
+    setText(value);
+    debouncedOnChange();
+  };
+
   return (
     <Box position="relative">
-      <TextInput name={lang.input} text={text} setText={setText} />
+      <button onClick={handleTranslate}>Translate</button>
+      <TextInput
+        name={lang.input}
+        text={text}
+        setText={setText}
+        handleTextInput={handleTextInput}
+      />
       <AbsoluteCenter axis="both" zIndex={1}>
         <ArrowUpDownIcon
           boxSize={10}
