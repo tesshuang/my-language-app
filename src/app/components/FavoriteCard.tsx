@@ -1,5 +1,5 @@
 import { Box, Text, Divider, Flex } from "@chakra-ui/react";
-import { Favorite } from "../page";
+import { Favorite } from "./TranslateHome";
 import { PlayIcon } from "./PlayIcon";
 import { StarIcon } from "@chakra-ui/icons";
 

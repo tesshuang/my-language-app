@@ -1,4 +1,4 @@
-import { Favorite } from "../page";
+import { Favorite } from "./TranslateHome";
 import { FavoriteCard } from "./FavoriteCard";
 
 export const Favorites = (props: {
