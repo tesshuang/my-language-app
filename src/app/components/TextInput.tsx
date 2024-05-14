@@ -13,8 +13,9 @@ export const TextInput = (props: {
   text: string;
   setText: (text: string) => void;
   handleTextInput: (value: string) => void;
+  setResult: (result: string) => void;
 }) => {
-  const { name, text, setText, handleTextInput } = props;
+  const { name, text, setText, handleTextInput, setResult } = props;
 
   return (
     <div>
@@ -45,7 +46,10 @@ export const TextInput = (props: {
                 borderRadius="50%"
                 p={1}
                 aria-label="reset text input"
-                onClick={() => setText("")}
+                onClick={() => {
+                  setText("");
+                  setResult("");
+                }}
               />
               <PlayIcon />
             </HStack>

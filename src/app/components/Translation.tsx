@@ -20,47 +20,49 @@ export const Translation = (props: {
     output: "English",
   });
   const [isTranslating, setIsTranslating] = useState(false);
+  const [result, setResult] = useState("");
 
   const handleSwitchLang = () => {
     const tempInput = lang.input;
-
     setLang({
       input: lang.output,
       output: tempInput,
     });
   };
 
+  const getLangCode = (lang: string) => (lang === "French" ? "fr" : "en");
+
   const handleTranslate = async () => {
     console.log("sending request to translation api:", text);
-    setIsTranslating(true);
-    setTimeout(() => {
-      console.log("translation is done!");
+
+    try {
+      const targetLang = getLangCode(lang.output);
+      const sourceLang = getLangCode(lang.input);
+      const translation = await translateText(text, sourceLang, targetLang);
+      setResult(translation);
       setIsTranslating(false);
-    }, 1000);
-    // try {
-    //   const text = "Hello world in local env.";
-    //   const translation = await translateText(text);
-    //   console.log("translation", translation);
-    // } catch (e) {
-    //   console.error(e);
-    // }
+    } catch (e) {
+      console.error(e);
+      setIsTranslating(false);
+    }
   };
 
   const debouncedOnChange = useDebounce(handleTranslate);
 
   const handleTextInput = (value: string) => {
+    setIsTranslating(true);
     setText(value);
     debouncedOnChange();
   };
 
   return (
     <Box position="relative">
-      <button onClick={handleTranslate}>Translate</button>
       <TextInput
         name={lang.input}
         text={text}
         setText={setText}
         handleTextInput={handleTextInput}
+        setResult={setResult}
       />
       <AbsoluteCenter axis="both" zIndex={1}>
         <ArrowUpDownIcon
@@ -78,11 +80,13 @@ export const Translation = (props: {
       <TextResult
         name={lang.output}
         inputLang={lang.input}
-        result=""
+        result={result}
         userInput={text}
         words={words}
         setAllWords={setAllWords}
         setText={setText}
+        isTranslating={isTranslating}
+        setResult={setResult}
       />
     </Box>
   );
