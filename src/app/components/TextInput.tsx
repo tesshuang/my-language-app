@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
+import { handleSynthesize } from "../utils/helpers";
 
 export const TextInput = (props: {
   name: string;
@@ -16,6 +17,8 @@ export const TextInput = (props: {
   setResult: (result: string) => void;
 }) => {
   const { name, text, setText, handleTextInput, setResult } = props;
+
+  const langCode = name === "French" ? "fr" : "en";
 
   return (
     <div>
@@ -51,7 +54,9 @@ export const TextInput = (props: {
                   setResult("");
                 }}
               />
-              <PlayIcon />
+              <PlayIcon
+                handlePlaySound={() => handleSynthesize(text, langCode)}
+              />
             </HStack>
           )}
         </Flex>

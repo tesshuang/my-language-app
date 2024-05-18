@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Icon } from "@chakra-ui/react";
 
-export const PlayIcon = () => {
+export const PlayIcon = (props: { handlePlaySound: () => void }) => {
   //TODO: Refactor state when implement api
+  const { handlePlaySound } = props;
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -17,7 +18,10 @@ export const PlayIcon = () => {
       viewBox="0 0 408.221 408.221"
       xmlSpace="preserve"
       aria-label="play the world"
-      onClick={() => setIsPlaying(!isPlaying)}
+      onClick={() => {
+        setIsPlaying(!isPlaying);
+        handlePlaySound();
+      }}
     >
       <g>
         <g>

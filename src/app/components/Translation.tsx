@@ -38,8 +38,10 @@ export const Translation = (props: {
     try {
       const targetLang = getLangCode(lang.output);
       const sourceLang = getLangCode(lang.input);
-      const translation = await translateText(text, sourceLang, targetLang);
-      setResult(translation);
+      // TODO: remove commenting api call
+      // const translation = await translateText(text, sourceLang, targetLang);
+      // setResult(translation);
+      setResult("translation placehodler");
       setIsTranslating(false);
     } catch (e) {
       console.error(e);
@@ -55,8 +57,30 @@ export const Translation = (props: {
     debouncedOnChange();
   };
 
+  const handleSynthesize = (text: string, langCode: string) => {
+    const synth = window.speechSynthesis;
+    console.log(`synth: ${synth}`);
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.lang = langCode;
+    const voices = synth.getVoices();
+    const voiceName = langCode === "en" ? "Aaron" : "Amélie";
+    const theVoice = voices.find((voice) => voice.name === voiceName);
+    console.log("theVoice: ", theVoice);
+
+    utterThis.voice = theVoice as SpeechSynthesisVoice | null;
+    console.log(`utterThis.voice`, utterThis.voice);
+    synth.speak(utterThis);
+  };
+
   return (
     <Box position="relative">
+      <p>Updated</p>
+      <button onClick={() => handleSynthesize("Hello from the local.", "en")}>
+        Synthesize English
+      </button>
+      <button onClick={() => handleSynthesize("Bonsoir, ca va.", "fr")}>
+        Synthesize Fr
+      </button>
       <TextInput
         name={lang.input}
         text={text}
