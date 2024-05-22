@@ -16,8 +16,14 @@ export const Translation = (props: {
 
   const [text, setText] = useState("");
   const [lang, setLang] = useState({
-    input: "French",
-    output: "English",
+    input: {
+      name: "French",
+      code: "fr",
+    },
+    output: {
+      name: "English",
+      code: "en",
+    },
   });
   const [isTranslating, setIsTranslating] = useState(false);
   const [result, setResult] = useState("");
@@ -30,14 +36,12 @@ export const Translation = (props: {
     });
   };
 
-  const getLangCode = (lang: string) => (lang === "French" ? "fr" : "en");
-
   const handleTranslate = async () => {
     console.log("sending request to translation api:", text);
 
     try {
-      const targetLang = getLangCode(lang.output);
-      const sourceLang = getLangCode(lang.input);
+      const targetLangCode = lang.output.code;
+      const sourceLangCode = lang.input.code;
       // TODO: remove commenting api call
       // const translation = await translateText(text, sourceLang, targetLang);
       // setResult(translation);
@@ -57,31 +61,10 @@ export const Translation = (props: {
     debouncedOnChange();
   };
 
-  const handleSynthesize = (text: string, langCode: string) => {
-    const synth = window.speechSynthesis;
-    console.log(`synth: ${synth}`);
-    const utterThis = new SpeechSynthesisUtterance(text);
-    utterThis.lang = langCode;
-    const voices = synth.getVoices();
-    const voiceName = langCode === "en" ? "Aaron" : "Amélie";
-    const theVoice = voices.find((voice) => voice.name === voiceName);
-    console.log("theVoice: ", theVoice);
-
-    utterThis.voice = theVoice as SpeechSynthesisVoice | null;
-    console.log(`utterThis.voice`, utterThis.voice);
-    synth.speak(utterThis);
-  };
-
   return (
     <Box position="relative">
-      <button onClick={() => handleSynthesize("Hello from the local.", "en")}>
-        Synthesize English
-      </button>
-      <button onClick={() => handleSynthesize("Bonsoir, ca va.", "fr")}>
-        Synthesize Fr
-      </button>
       <TextInput
-        name={lang.input}
+        lang={lang.input}
         text={text}
         setText={setText}
         handleTextInput={handleTextInput}
@@ -101,8 +84,8 @@ export const Translation = (props: {
       </AbsoluteCenter>
       <Box p={1} />
       <TextResult
-        name={lang.output}
-        inputLang={lang.input}
+        outputLang={lang.output}
+        inputLang={lang.input.name}
         result={result}
         userInput={text}
         words={words}

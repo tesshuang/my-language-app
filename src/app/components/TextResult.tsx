@@ -3,11 +3,15 @@ import { StarIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { Favorite } from "./TranslateHome";
 import { useEffect, useState } from "react";
+import { handleSpeechSynthesis } from "../utils/helpers";
 
 let id = 0;
 
 export const TextResult = (props: {
-  name: string;
+  outputLang: {
+    name: string;
+    code: string;
+  };
   inputLang: string;
   result: string;
   userInput: string;
@@ -18,7 +22,7 @@ export const TextResult = (props: {
   setResult: (result: string) => void;
 }) => {
   const {
-    name,
+    outputLang: { name, code },
     inputLang,
     result,
     userInput,
@@ -29,6 +33,7 @@ export const TextResult = (props: {
     setResult,
   } = props;
   const [loader, setLoader] = useState(".");
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -80,7 +85,14 @@ export const TextResult = (props: {
           {isTranslating && <span>{loader}</span>}
         </Text>
 
-        <Box mt={2}>{Boolean(result) && <PlayIcon />}</Box>
+        <Box mt={2}>
+          {Boolean(result) && (
+            <PlayIcon
+              isPlaying={isPlaying}
+              onClick={() => handleSpeechSynthesis(result, code, setIsPlaying)}
+            />
+          )}
+        </Box>
       </Flex>
       <StarIcon
         color="gray.500"

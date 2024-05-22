@@ -7,18 +7,27 @@ import {
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
-import { useSpeechSynthesis } from "../utils/hooks";
+import { useState } from "react";
+import { handleSpeechSynthesis } from "../utils/helpers";
 
 export const TextInput = (props: {
-  name: string;
+  lang: {
+    name: string;
+    code: string;
+  };
   text: string;
   setText: (text: string) => void;
   handleTextInput: (value: string) => void;
   setResult: (result: string) => void;
 }) => {
-  const { name, text, setText, handleTextInput, setResult } = props;
-  const langCode = name === "French" ? "fr" : "en";
-  const { isPlaying, setIsPlaying } = useSpeechSynthesis(text, langCode);
+  const {
+    lang: { name, code },
+    text,
+    setText,
+    handleTextInput,
+    setResult,
+  } = props;
+  const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <div>
@@ -54,7 +63,10 @@ export const TextInput = (props: {
                   setResult("");
                 }}
               />
-              <PlayIcon isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+              <PlayIcon
+                isPlaying={isPlaying}
+                onClick={() => handleSpeechSynthesis(text, code, setIsPlaying)}
+              />
             </HStack>
           )}
         </Flex>
