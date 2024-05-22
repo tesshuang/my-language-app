@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
-import { handleSynthesize } from "../utils/helpers";
+import { useSpeechSynthesis } from "../utils/hooks";
 
 export const TextInput = (props: {
   name: string;
@@ -17,8 +17,8 @@ export const TextInput = (props: {
   setResult: (result: string) => void;
 }) => {
   const { name, text, setText, handleTextInput, setResult } = props;
-
   const langCode = name === "French" ? "fr" : "en";
+  const { isPlaying, setIsPlaying } = useSpeechSynthesis(text, langCode);
 
   return (
     <div>
@@ -54,9 +54,7 @@ export const TextInput = (props: {
                   setResult("");
                 }}
               />
-              <PlayIcon
-                handlePlaySound={() => handleSynthesize(text, langCode)}
-              />
+              <PlayIcon isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
             </HStack>
           )}
         </Flex>

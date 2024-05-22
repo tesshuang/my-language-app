@@ -63,8 +63,6 @@ export const TextResult = (props: {
     setResult("");
   };
 
-  console.log(`result: ${result}`);
-
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
       <Text fontSize="xl" fontWeight="medium">

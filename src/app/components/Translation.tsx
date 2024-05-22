@@ -74,7 +74,6 @@ export const Translation = (props: {
 
   return (
     <Box position="relative">
-      <p>Updated</p>
       <button onClick={() => handleSynthesize("Hello from the local.", "en")}>
         Synthesize English
       </button>
