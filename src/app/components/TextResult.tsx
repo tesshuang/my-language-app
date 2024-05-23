@@ -1,10 +1,11 @@
 import { Text, Box, Flex } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
+import { StarIcon, CopyIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { Favorite } from "./TranslateHome";
 import { useEffect, useState } from "react";
-import { handleSpeechSynthesis } from "../utils/helpers";
+import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
+import { useToast } from "@chakra-ui/react";
 
 let id = 0;
 
@@ -19,8 +20,11 @@ export const TextResult = (props: {
   const { input, output } = content;
   const { name: inputLang, text: userInput } = input;
   const { name, code: outputCode, text: result } = output;
+
   const [loader, setLoader] = useState(".");
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const toast = useToast();
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -63,6 +67,26 @@ export const TextResult = (props: {
     });
   };
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(content.output.text);
+      toast({
+        description: "Translation copied successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        description: "Translation copied failed.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
       <Text fontSize="xl" fontWeight="medium">
@@ -87,15 +111,38 @@ export const TextResult = (props: {
               onClick={() =>
                 handleSpeechSynthesis(result, outputCode, setIsPlaying)
               }
+              onKeyDown={(e) => {
+                handleEnterKey(e, () =>
+                  handleSpeechSynthesis(result, outputCode, setIsPlaying)
+                );
+              }}
             />
           )}
         </Box>
       </Flex>
-      <StarIcon
-        color="gray.500"
-        aria-label="add this word to favorite collection"
-        onClick={addToFavorties}
-      />
+      {Boolean(userInput) && (
+        <>
+          <StarIcon
+            color="gray.500"
+            aria-label="add this word to favorite collection"
+            onClick={addToFavorties}
+            onKeyDown={(e) => {
+              handleEnterKey(e, addToFavorties);
+            }}
+            tabIndex={0}
+            mr="2"
+          />
+          <CopyIcon
+            color="gray.500"
+            aria-label="copy this word to clipboard"
+            tabIndex={0}
+            onClick={handleCopy}
+            onKeyDown={(e) => {
+              handleEnterKey(e, handleCopy);
+            }}
+          />
+        </>
+      )}
     </Box>
   );
 };

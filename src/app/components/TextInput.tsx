@@ -8,7 +8,7 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { useState } from "react";
-import { handleSpeechSynthesis } from "../utils/helpers";
+import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
 
 export const TextInput = (props: {
@@ -20,6 +20,19 @@ export const TextInput = (props: {
   const { input } = content;
   const { name, code, text } = input;
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleRest = () => {
+    setContent({
+      input: {
+        ...content.input,
+        text: "",
+      },
+      output: {
+        ...content.output,
+        text: "",
+      },
+    });
+  };
 
   return (
     <div>
@@ -50,22 +63,20 @@ export const TextInput = (props: {
                 borderRadius="50%"
                 p={1}
                 aria-label="reset text input"
-                onClick={() => {
-                  setContent({
-                    input: {
-                      ...content.input,
-                      text: "",
-                    },
-                    output: {
-                      ...content.output,
-                      text: "",
-                    },
-                  });
+                onClick={handleRest}
+                onKeyDown={(e) => {
+                  handleEnterKey(e, handleRest);
                 }}
+                tabIndex={0}
               />
               <PlayIcon
                 isPlaying={isPlaying}
                 onClick={() => handleSpeechSynthesis(text, code, setIsPlaying)}
+                onKeyDown={(e) => {
+                  handleEnterKey(e, () =>
+                    handleSpeechSynthesis(text, code, setIsPlaying)
+                  );
+                }}
               />
             </HStack>
           )}

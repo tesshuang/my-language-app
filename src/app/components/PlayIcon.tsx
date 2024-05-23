@@ -1,11 +1,11 @@
 import { Icon } from "@chakra-ui/react";
-import { Dispatch, SetStateAction } from "react";
 
 export const PlayIcon = (props: {
   isPlaying: boolean;
   onClick: () => void;
+  onKeyDown: (event: any) => void;
 }) => {
-  const { isPlaying, onClick } = props;
+  const { isPlaying, onClick, onKeyDown } = props;
 
   return (
     <Icon
@@ -22,6 +22,8 @@ export const PlayIcon = (props: {
         isPlaying ? "pause the speaking" : "play the sound of the word"
       }
       onClick={onClick}
+      onKeyDown={onKeyDown}
+      tabIndex={0}
     >
       <g>
         {isPlaying ? (
