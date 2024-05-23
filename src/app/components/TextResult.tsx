@@ -4,34 +4,21 @@ import { PlayIcon } from "./PlayIcon";
 import { Favorite } from "./TranslateHome";
 import { useEffect, useState } from "react";
 import { handleSpeechSynthesis } from "../utils/helpers";
+import type { Content } from "./Translation";
 
 let id = 0;
 
 export const TextResult = (props: {
-  outputLang: {
-    name: string;
-    code: string;
-  };
-  inputLang: string;
-  result: string;
-  userInput: string;
+  content: Content;
+  setContent: (content: Content) => void;
   words: Favorite[];
   setAllWords: (words: Favorite[]) => void;
-  setText: (text: string) => void;
   isTranslating: boolean;
-  setResult: (result: string) => void;
 }) => {
-  const {
-    outputLang: { name, code },
-    inputLang,
-    result,
-    userInput,
-    setAllWords,
-    words,
-    setText,
-    isTranslating,
-    setResult,
-  } = props;
+  const { content, setContent, setAllWords, words, isTranslating } = props;
+  const { input, output } = content;
+  const { name: inputLang, text: userInput } = input;
+  const { name, code: outputCode, text: result } = output;
   const [loader, setLoader] = useState(".");
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -64,8 +51,16 @@ export const TextResult = (props: {
       },
       ...words,
     ]);
-    setText("");
-    setResult("");
+    setContent({
+      input: {
+        ...content.input,
+        text: "",
+      },
+      output: {
+        ...content.output,
+        text: "",
+      },
+    });
   };
 
   return (
@@ -89,7 +84,9 @@ export const TextResult = (props: {
           {Boolean(result) && (
             <PlayIcon
               isPlaying={isPlaying}
-              onClick={() => handleSpeechSynthesis(result, code, setIsPlaying)}
+              onClick={() =>
+                handleSpeechSynthesis(result, outputCode, setIsPlaying)
+              }
             />
           )}
         </Box>

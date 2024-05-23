@@ -9,24 +9,16 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { useState } from "react";
 import { handleSpeechSynthesis } from "../utils/helpers";
+import type { Content } from "./Translation";
 
 export const TextInput = (props: {
-  lang: {
-    name: string;
-    code: string;
-  };
-  text: string;
-  setText: (text: string) => void;
+  content: Content;
+  setContent: (content: Content) => void;
   handleTextInput: (value: string) => void;
-  setResult: (result: string) => void;
 }) => {
-  const {
-    lang: { name, code },
-    text,
-    setText,
-    handleTextInput,
-    setResult,
-  } = props;
+  const { content, setContent, handleTextInput } = props;
+  const { input } = content;
+  const { name, code, text } = input;
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -59,8 +51,16 @@ export const TextInput = (props: {
                 p={1}
                 aria-label="reset text input"
                 onClick={() => {
-                  setText("");
-                  setResult("");
+                  setContent({
+                    input: {
+                      ...content.input,
+                      text: "",
+                    },
+                    output: {
+                      ...content.output,
+                      text: "",
+                    },
+                  });
                 }}
               />
               <PlayIcon
