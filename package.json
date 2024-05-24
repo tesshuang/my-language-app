@@ -14,8 +14,10 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@google-cloud/translate": "^8.2.0",
+    "@prisma/client": "5.14.0",
     "framer-motion": "^11.1.7",
     "next": "14.2.3",
+    "prisma": "^5.14.0",
     "react": "^18",
     "react-dom": "^18"
   },
