@@ -5,15 +5,17 @@ import { useState } from "react";
 import { Favorites } from "./Favorites";
 
 export type Favorite = {
-  id: string;
+  id: number;
+  createdAt: Date;
   userInput: string;
   inputLang: string;
-  result: string;
-  resultLang: string;
+  translation: string;
+  translationLang: string;
 };
 
-export const TranslateHome = () => {
-  const [allFavs, setAllFavs] = useState<Favorite[]>([]);
+export const TranslateHome = (props: { data: Favorite[] }) => {
+  const { data } = props;
+  const [allFavs, setAllFavs] = useState<Favorite[]>(data);
 
   return (
     <>

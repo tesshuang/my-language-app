@@ -47,11 +47,12 @@ export const TextResult = (props: {
 
     setAllWords([
       {
-        id: `${id}`,
+        id: id,
+        createdAt: new Date(),
         userInput,
         inputLang,
-        result,
-        resultLang: name,
+        translation: result,
+        translationLang: name,
       },
       ...words,
     ]);
