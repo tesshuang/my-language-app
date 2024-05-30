@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
-let id = 0;
+let id = 3;
 
 export const TextResult = (props: {
   content: Content;
@@ -25,6 +26,7 @@ export const TextResult = (props: {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const toast = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -42,20 +44,41 @@ export const TextResult = (props: {
     return () => clearInterval(interval);
   }, [isTranslating, loader]);
 
-  const addToFavorties = () => {
+  const addToFavorties = async () => {
     id = id + 1;
-
-    setAllWords([
-      {
+    try {
+      console.log("call /api/favorite");
+      const body = {
         id: id,
         createdAt: new Date(),
         userInput,
         inputLang,
         translation: result,
         translationLang: name,
-      },
-      ...words,
-    ]);
+      };
+
+      await fetch(`/api/favorite`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      router.refresh(); // TODO: Investigate why it's not refreshing
+    } catch (error) {
+      console.error(error);
+    }
+
+    // setAllWords([
+    //   {
+    //     id: id,
+    //     createdAt: new Date(),
+    //     userInput,
+    //     inputLang,
+    //     translation: result,
+    //     translationLang: name,
+    //   },
+    //   ...words,
+    // ]);
     setContent({
       input: {
         ...content.input,
