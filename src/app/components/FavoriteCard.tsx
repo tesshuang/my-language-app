@@ -4,6 +4,7 @@ import { PlayIcon } from "./PlayIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
+import { useRouter } from "next/navigation";
 
 const WordContent = (props: { lang: string; word: string }) => {
   const { lang, word } = props;
@@ -31,13 +32,23 @@ const WordContent = (props: { lang: string; word: string }) => {
   );
 };
 
-export const FavoriteCard = (props: {
-  word: Favorite;
-  words: Favorite[];
-  setAllWords: (words: Favorite[]) => void;
-}) => {
-  const { word, words, setAllWords } = props;
+export const FavoriteCard = (props: { word: Favorite }) => {
+  const { word } = props;
   const { id, inputLang, userInput, translationLang, translation } = word;
+  const router = useRouter();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`/api/favorite/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      router.refresh();
+      console.log("response from handleDelete, ", response);
+    } catch (e) {
+      console.error("Error occurs when handleDelete", e);
+    }
+  };
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md" mt={2}>
       <WordContent lang={inputLang} word={userInput} />
@@ -46,9 +57,7 @@ export const FavoriteCard = (props: {
       <StarIcon
         color="blue.500"
         aria-label="remove this word from favorite collection"
-        onClick={() => {
-          setAllWords(words.filter((word) => word.id !== id));
-        }}
+        onClick={() => handleDelete(id)}
       />
     </Box>
   );

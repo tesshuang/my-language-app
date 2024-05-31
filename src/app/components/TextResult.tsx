@@ -42,7 +42,6 @@ export const TextResult = (props: {
 
   const addToFavorties = async () => {
     try {
-      console.log("call /api/favorite");
       const body = {
         id: uuidv4(),
         createdAt: new Date(),

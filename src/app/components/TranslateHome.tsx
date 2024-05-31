@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
 
 export type Favorite = {
-  id: number;
+  id: string;
   createdAt: Date;
   userInput: string;
   inputLang: string;
@@ -35,7 +35,7 @@ export const TranslateHome = (props: { data: Favorite[] }) => {
         <Heading as="h1" size="2xl">
           Favorites
         </Heading>
-        <Favorites words={allFavs} setAllWords={setAllFavs} />
+        <Favorites words={allFavs} />
       </section>
     </>
   );
