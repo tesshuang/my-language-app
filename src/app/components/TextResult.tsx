@@ -6,8 +6,7 @@ import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-
-let id = 3;
+import { v4 as uuidv4 } from "uuid";
 
 export const TextResult = (props: {
   content: Content;
@@ -42,11 +41,10 @@ export const TextResult = (props: {
   }, [isTranslating, loader]);
 
   const addToFavorties = async () => {
-    id = id + 1;
     try {
       console.log("call /api/favorite");
       const body = {
-        id: id,
+        id: uuidv4(),
         createdAt: new Date(),
         userInput,
         inputLang,

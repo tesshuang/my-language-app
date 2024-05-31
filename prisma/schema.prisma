@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Favorite {
-  id              Int      @id @default(autoincrement())
+  id              String   @id @default(uuid())
   createdAt       DateTime @default(now())
   userInput       String   @db.VarChar(255)
   inputLang       String   @db.VarChar(255)
