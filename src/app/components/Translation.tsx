@@ -4,7 +4,6 @@ import { Box, AbsoluteCenter } from "@chakra-ui/react";
 import { TextInput } from "./TextInput";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
-import { Favorite } from "./TranslateHome";
 import { translateText } from "../utils/translate-api";
 import { useDebounce } from "../utils/hooks";
 
@@ -18,12 +17,7 @@ export type Content = {
   output: InnerContent;
 };
 
-export const Translation = (props: {
-  words: Favorite[];
-  setAllWords: (words: Favorite[]) => void;
-}) => {
-  const { setAllWords, words } = props;
-
+export const Translation = (props: {}) => {
   const [content, setContent] = useState<Content>({
     input: {
       name: "French",
@@ -109,8 +103,6 @@ export const Translation = (props: {
       <TextResult
         content={content}
         setContent={setContent}
-        words={words}
-        setAllWords={setAllWords}
         isTranslating={isTranslating}
       />
     </Box>

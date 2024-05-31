@@ -1,7 +1,7 @@
 "use client";
 import { VStack, Heading } from "@chakra-ui/react";
 import { Translation } from "./Translation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
 
 export type Favorite = {
@@ -17,13 +17,19 @@ export const TranslateHome = (props: { data: Favorite[] }) => {
   const { data } = props;
   const [allFavs, setAllFavs] = useState<Favorite[]>(data);
 
+  useEffect(() => {
+    if (data.length !== allFavs.length) {
+      setAllFavs(data);
+    }
+  }, [allFavs.length, data]);
+
   return (
     <>
       <VStack spacing={4} align="stretch">
         <Heading as="h1" size="2xl">
           Translation
         </Heading>
-        <Translation setAllWords={setAllFavs} words={allFavs} />
+        <Translation />
       </VStack>
       <section>
         <Heading as="h1" size="2xl">

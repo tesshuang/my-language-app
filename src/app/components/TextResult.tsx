@@ -1,7 +1,6 @@
 import { Text, Box, Flex } from "@chakra-ui/react";
 import { StarIcon, CopyIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
-import { Favorite } from "./TranslateHome";
 import { useEffect, useState } from "react";
 import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
@@ -13,11 +12,9 @@ let id = 3;
 export const TextResult = (props: {
   content: Content;
   setContent: (content: Content) => void;
-  words: Favorite[];
-  setAllWords: (words: Favorite[]) => void;
   isTranslating: boolean;
 }) => {
-  const { content, setContent, setAllWords, words, isTranslating } = props;
+  const { content, setContent, isTranslating } = props;
   const { input, output } = content;
   const { name: inputLang, text: userInput } = input;
   const { name, code: outputCode, text: result } = output;
@@ -63,32 +60,21 @@ export const TextResult = (props: {
         body: JSON.stringify(body),
       });
 
-      router.refresh(); // TODO: Investigate why it's not refreshing
+      setContent({
+        input: {
+          ...content.input,
+          text: "",
+        },
+        output: {
+          ...content.output,
+          text: "",
+        },
+      });
+
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
-
-    // setAllWords([
-    //   {
-    //     id: id,
-    //     createdAt: new Date(),
-    //     userInput,
-    //     inputLang,
-    //     translation: result,
-    //     translationLang: name,
-    //   },
-    //   ...words,
-    // ]);
-    setContent({
-      input: {
-        ...content.input,
-        text: "",
-      },
-      output: {
-        ...content.output,
-        text: "",
-      },
-    });
   };
 
   const handleCopy = async () => {
