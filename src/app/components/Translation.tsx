@@ -6,6 +6,7 @@ import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
 import { translateText } from "../utils/translate-api";
 import { useDebounce } from "../utils/hooks";
+import { useToast } from "@chakra-ui/react";
 
 type InnerContent = {
   name: string;
@@ -32,6 +33,8 @@ export const Translation = (props: {}) => {
   });
   const [isTranslating, setIsTranslating] = useState(false);
 
+  const toast = useToast();
+
   const handleSwitchLang = () => {
     setContent({
       input: {
@@ -44,24 +47,37 @@ export const Translation = (props: {}) => {
   };
 
   const handleTranslate = async () => {
-    console.log("sending request to translation api:", content.input.text);
+    const {
+      input: { text, code: sourceLangCode },
+      output: { code: targetLangCode },
+    } = content;
 
     try {
-      const targetLangCode = content.output.code;
-      const sourceLangCode = content.input.code;
       // TODO: remove commenting api call
-      // const translation = await translateText(text, sourceLang, targetLang);
+      // const translation = await translateText(
+      //   text,
+      //   sourceLangCode,
+      //   targetLangCode
+      // );
       setContent({
         ...content,
         output: {
           ...content.output,
           // TODO: replace placeholder with variable
+          // text: translation,
           text: "translation placeholder",
         },
       });
       setIsTranslating(false);
     } catch (e) {
       console.error(e);
+      toast({
+        description:
+          "Sorry. There is an error from translating the text. Try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       setIsTranslating(false);
     }
   };
