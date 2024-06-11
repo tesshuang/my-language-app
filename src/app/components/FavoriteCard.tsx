@@ -5,6 +5,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
 import { useRouter } from "next/navigation";
+import { CategoryModal } from "./CategoryModal";
 
 const WordContent = (props: { lang: string; word: string }) => {
   const { lang, word } = props;
@@ -32,8 +33,12 @@ const WordContent = (props: { lang: string; word: string }) => {
   );
 };
 
-export const FavoriteCard = (props: { word: Favorite }) => {
-  const { word } = props;
+export const FavoriteCard = (props: {
+  word: Favorite;
+  category: string[];
+  setCategory: (category: string[]) => void;
+}) => {
+  const { word, category, setCategory } = props;
   const { id, inputLang, userInput, translationLang, translation } = word;
   const router = useRouter();
 
@@ -55,10 +60,16 @@ export const FavoriteCard = (props: { word: Favorite }) => {
       <Divider borderColor="gray.500" my={2} />
       <WordContent lang={translationLang} word={translation} />
       <StarIcon
+        tabIndex={0}
         color="blue.500"
+        mr="2"
         aria-label="remove this word from favorite collection"
         onClick={() => handleDelete(id)}
+        onKeyDown={(e) => {
+          handleEnterKey(e, () => handleDelete(id));
+        }}
       />
+      <CategoryModal category={category} setCategory={setCategory} />
     </Box>
   );
 };

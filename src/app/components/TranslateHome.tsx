@@ -17,6 +17,7 @@ export type Favorite = {
 export const TranslateHome = (props: { data: Favorite[] }) => {
   const { data } = props;
   const [allFavs, setAllFavs] = useState<Favorite[]>(data);
+  const [category, setCategory] = useState(["Favorites"]);
 
   useEffect(() => {
     if (data.length !== allFavs.length) {
@@ -38,7 +39,11 @@ export const TranslateHome = (props: { data: Favorite[] }) => {
             Favorites
           </Heading>
         </Link>
-        <Favorites words={allFavs} />
+        <Favorites
+          words={allFavs}
+          category={category}
+          setCategory={setCategory}
+        />
       </section>
     </>
   );

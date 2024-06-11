@@ -1,14 +1,25 @@
 import { Favorite } from "./TranslateHome";
 import { FavoriteCard } from "./FavoriteCard";
 
-export const Favorites = (props: { words: Favorite[] }) => {
-  const { words } = props;
+export const Favorites = (props: {
+  words: Favorite[];
+  category: string[];
+  setCategory: (category: string[]) => void;
+}) => {
+  const { words, category, setCategory } = props;
   return (
     <div>
       {words.length !== 0 ? (
         <div>
           {words.map((word, index) => {
-            return <FavoriteCard key={index} word={word} />;
+            return (
+              <FavoriteCard
+                key={index}
+                word={word}
+                category={category}
+                setCategory={setCategory}
+              />
+            );
           })}
         </div>
       ) : (
