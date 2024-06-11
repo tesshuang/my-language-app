@@ -3,6 +3,7 @@ import { VStack, Heading } from "@chakra-ui/react";
 import { Translation } from "./Translation";
 import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
+import Link from "next/link";
 
 export type Favorite = {
   id: string;
@@ -32,9 +33,11 @@ export const TranslateHome = (props: { data: Favorite[] }) => {
         <Translation />
       </VStack>
       <section>
-        <Heading as="h1" size="2xl">
-          Favorites
-        </Heading>
+        <Link href="/favorites">
+          <Heading as="h1" size="2xl" textDecoration="underline">
+            Favorites
+          </Heading>
+        </Link>
         <Favorites words={allFavs} />
       </section>
     </>
