@@ -6,7 +6,7 @@ import prisma from '../../utils/prisma'
 export async function POST(request: Request) {
   const data  = await request.json()
 
-  const { id, userInput, inputLang,translation,translationLang } = data
+  const { id, userInput, inputLang, translation, translationLang } = data
   await prisma.favorite.create({
     data: {
       id,
@@ -14,6 +14,26 @@ export async function POST(request: Request) {
       inputLang,
       translation,
       translationLang,
+      categories: {
+        create: [
+          {
+            assignedAt: new Date(),
+            category: {
+              //TODO: fix constant id value
+              // create new category if favorites is not found
+              connectOrCreate: {
+                where: {
+                  id: 2
+                },
+                create: {
+                  name: 'Favorites',
+                  id: 2,
+                },
+              },
+            },
+          },
+        ],
+      },
     },
   })
 
