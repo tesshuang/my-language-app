@@ -14,12 +14,27 @@ datasource db {
 }
 
 model Favorite {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now())
-  userInput       String   @db.VarChar(255)
-  inputLang       String   @db.VarChar(255)
-  translation     String   @db.VarChar(255)
-  translationLang String   @db.VarChar(255)
-  // author    User     @relation(fields: [authorId], references: [id])
-  // authorId  Int
+  id              String                  @id @default(uuid())
+  createdAt       DateTime                @default(now())
+  userInput       String                  @db.VarChar(255)
+  inputLang       String                  @db.VarChar(255)
+  translation     String                  @db.VarChar(255)
+  translationLang String                  @db.VarChar(255)
+  categories      CategoriesOnFavorites[]
+}
+
+model Category {
+  id        Int                     @id @default(autoincrement())
+  name      String                  @db.VarChar(255)
+  favorites CategoriesOnFavorites[]
+}
+
+model CategoriesOnFavorites {
+  favorite   Favorite @relation(fields: [favoriteId], references: [id])
+  favoriteId String // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+
+  @@id([favoriteId, categoryId])
 }
