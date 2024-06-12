@@ -14,16 +14,24 @@ export type Favorite = {
   translationLang: string;
 };
 
-export const TranslateHome = (props: { data: Favorite[] }) => {
-  const { data } = props;
-  const [allFavs, setAllFavs] = useState<Favorite[]>(data);
-  const [category, setCategory] = useState(["Favorites"]);
+export type Category = {
+  id: number;
+  name: string;
+};
+
+export const TranslateHome = (props: {
+  favorites: Favorite[];
+  categories: Category[];
+}) => {
+  const { favorites, categories } = props;
+  const [allFavs, setAllFavs] = useState<Favorite[]>(favorites);
+  const [category, setCategory] = useState(categories);
 
   useEffect(() => {
-    if (data.length !== allFavs.length) {
-      setAllFavs(data);
+    if (favorites.length !== allFavs.length) {
+      setAllFavs(favorites);
     }
-  }, [allFavs.length, data]);
+  }, [allFavs.length, favorites]);
 
   return (
     <>

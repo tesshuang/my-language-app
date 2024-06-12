@@ -1,5 +1,5 @@
 import { Box, Text, Divider, Flex } from "@chakra-ui/react";
-import { Favorite } from "./TranslateHome";
+import { Category, Favorite } from "./TranslateHome";
 import { PlayIcon } from "./PlayIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import { useState } from "react";
@@ -35,8 +35,8 @@ const WordContent = (props: { lang: string; word: string }) => {
 
 export const FavoriteCard = (props: {
   word: Favorite;
-  category: string[];
-  setCategory: (category: string[]) => void;
+  category: Category[];
+  setCategory: (category: Category[]) => void;
 }) => {
   const { word, category, setCategory } = props;
   const { id, inputLang, userInput, translationLang, translation } = word;

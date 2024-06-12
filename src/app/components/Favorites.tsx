@@ -1,10 +1,10 @@
-import { Favorite } from "./TranslateHome";
+import { Category, Favorite } from "./TranslateHome";
 import { FavoriteCard } from "./FavoriteCard";
 
 export const Favorites = (props: {
   words: Favorite[];
-  category: string[];
-  setCategory: (category: string[]) => void;
+  category: Category[];
+  setCategory: (category: Category[]) => void;
 }) => {
   const { words, category, setCategory } = props;
   return (

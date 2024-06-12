@@ -15,10 +15,11 @@ import {
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import { CheckCircleIcon, InfoIcon } from "@chakra-ui/icons";
+import { Category } from "@prisma/client";
 
 export const CategoryModal = (props: {
-  category: string[];
-  setCategory: (category: string[]) => void;
+  category: Category[];
+  setCategory: (category: Category[]) => void;
 }) => {
   const { category, setCategory } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,7 +27,8 @@ export const CategoryModal = (props: {
   const [isCreate, setIsCreate] = useState(false);
 
   const handleCreateCategory = () => {
-    setCategory([...category, text]);
+    // setCategory([...category, text]);
+
     setText("");
     setIsCreate(false);
   };
@@ -78,7 +80,7 @@ export const CategoryModal = (props: {
                   display="flex"
                   justifyContent="space-between"
                 >
-                  {item}
+                  {item.name}
                   <CheckCircleIcon color="blue.500" />
                 </ListItem>
               ))}

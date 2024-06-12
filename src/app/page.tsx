@@ -9,11 +9,12 @@ export default async function Home() {
       createdAt: "desc",
     },
   });
+  const categories = await prisma.category.findMany();
   console.log("allFavourites from prisma, ", allFavourites);
 
   return (
     <VStack as="main" align="stretch" p={4}>
-      <TranslateHome data={allFavourites} />
+      <TranslateHome favorites={allFavourites} categories={categories} />
     </VStack>
   );
 }
