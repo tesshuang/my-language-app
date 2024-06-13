@@ -17,6 +17,13 @@ export default async function Home() {
         },
       },
     },
+    include: {
+      categories: {
+        select: {
+          category: true,
+        },
+      },
+    },
   });
 
   const categories = await prisma.category.findMany();
