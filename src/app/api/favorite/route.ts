@@ -19,16 +19,8 @@ export async function POST(request: Request) {
           {
             assignedAt: new Date(),
             category: {
-              //TODO: fix constant id value
-              // create new category if favorites is not found
-              connectOrCreate: {
-                where: {
-                  id: 2
-                },
-                create: {
-                  name: 'Favorites',
-                  id: 2,
-                },
+              connect: {
+                id: 1,
               },
             },
           },
