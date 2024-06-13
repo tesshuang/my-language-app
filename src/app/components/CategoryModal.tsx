@@ -26,9 +26,20 @@ export const CategoryModal = (props: {
   const [text, setText] = useState("");
   const [isCreate, setIsCreate] = useState(false);
 
-  const handleCreateCategory = () => {
-    // setCategory([...category, text]);
+  const handleCreateCategory = async () => {
+    const body = {
+      name: text,
+    };
 
+    const response = await fetch(`/api/category`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const { data }: { data: Category } = await response.json();
+
+    setCategory([...category, data]);
     setText("");
     setIsCreate(false);
   };
@@ -81,13 +92,9 @@ export const CategoryModal = (props: {
                   justifyContent="space-between"
                 >
                   {item.name}
-                  <CheckCircleIcon color="blue.500" />
+                  <CheckCircleIcon color="gray.500" />
                 </ListItem>
               ))}
-              <ListItem display="flex" justifyContent="space-between">
-                List 2
-                <CheckCircleIcon color="gray.500" />
-              </ListItem>
             </List>
           </ModalBody>
 

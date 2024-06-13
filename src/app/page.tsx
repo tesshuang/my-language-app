@@ -8,7 +8,17 @@ export default async function Home() {
     orderBy: {
       createdAt: "desc",
     },
+    where: {
+      categories: {
+        some: {
+          category: {
+            name: "Favorites",
+          },
+        },
+      },
+    },
   });
+
   const categories = await prisma.category.findMany();
   console.log("allFavourites from prisma, ", allFavourites);
 
