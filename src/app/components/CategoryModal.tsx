@@ -24,10 +24,16 @@ export const CategoryModal = (props: {
   word: Favorite;
 }) => {
   const { category, setCategory, word } = props;
+  console.log("🚀 ~ word.categories:", word.categories);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [text, setText] = useState("");
   const [isCreate, setIsCreate] = useState(false);
+
+  const getCategoryIds: number[] = word.categories.map(
+    (item) => item.category.id
+  );
+  const [categoryIds, setCategoryIds] = useState(getCategoryIds);
 
   const toast = useToast();
 
@@ -56,6 +62,13 @@ export const CategoryModal = (props: {
         isClosable: true,
       });
     }
+  };
+
+  const handleCategoryIds = (id: number) => {
+    const updated = categoryIds.includes(id)
+      ? categoryIds.filter((categoryId) => categoryId !== id)
+      : [...categoryIds, id];
+    setCategoryIds(updated);
   };
 
   return (
@@ -109,10 +122,12 @@ export const CategoryModal = (props: {
                     {item.name}
                     <CheckCircleIcon
                       color={
-                        word.categories[key]?.category?.name === item.name
-                          ? "blue.500"
-                          : "gray.500"
+                        categoryIds.includes(item.id) ? "blue.500" : "gray.500"
                       }
+                      aria-label={`${word.userInput} is${
+                        categoryIds.includes(item.id) ? "" : " not"
+                      } in category ${item.name}.`}
+                      onClick={() => handleCategoryIds(item.id)}
                     />
                   </ListItem>
                 );
