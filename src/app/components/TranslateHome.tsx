@@ -12,11 +12,19 @@ export type Favorite = {
   inputLang: string;
   translation: string;
   translationLang: string;
+  categories: {
+    category: {
+      id: number;
+      name: string;
+      isDefault: boolean;
+    };
+  }[];
 };
 
 export type Category = {
   id: number;
   name: string;
+  isDefault: boolean;
 };
 
 export const TranslateHome = (props: {
@@ -25,7 +33,9 @@ export const TranslateHome = (props: {
 }) => {
   const { favorites, categories } = props;
   const [allFavs, setAllFavs] = useState<Favorite[]>(favorites);
+  console.log("🚀 ~ favorites:", favorites);
   const [category, setCategory] = useState(categories);
+  console.log("🚀 ~ categories:", categories);
 
   useEffect(() => {
     if (favorites.length !== allFavs.length) {

@@ -69,7 +69,11 @@ export const FavoriteCard = (props: {
           handleEnterKey(e, () => handleDelete(id));
         }}
       />
-      <CategoryModal category={category} setCategory={setCategory} />
+      <CategoryModal
+        category={category}
+        setCategory={setCategory}
+        word={word}
+      />
     </Box>
   );
 };

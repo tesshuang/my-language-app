@@ -12,36 +12,51 @@ import {
   ListItem,
   Input,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import { CheckCircleIcon, InfoIcon } from "@chakra-ui/icons";
-import { Category } from "@prisma/client";
+import { Category, Favorite } from "./TranslateHome";
 
 export const CategoryModal = (props: {
   category: Category[];
   setCategory: (category: Category[]) => void;
+  word: Favorite;
 }) => {
-  const { category, setCategory } = props;
+  const { category, setCategory, word } = props;
+  console.log("🚀 ~ word:", word.categories);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [text, setText] = useState("");
   const [isCreate, setIsCreate] = useState(false);
 
+  const toast = useToast();
+
   const handleCreateCategory = async () => {
-    const body = {
-      name: text,
-    };
+    try {
+      const body = {
+        name: text,
+      };
+      const response = await fetch(`/api/category`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    const response = await fetch(`/api/category`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+      const { data }: { data: Category } = await response.json();
 
-    const { data }: { data: Category } = await response.json();
-
-    setCategory([...category, data]);
-    setText("");
-    setIsCreate(false);
+      setCategory([...category, data]);
+      setText("");
+      setIsCreate(false);
+    } catch (e) {
+      console.error(e);
+      toast({
+        description: "There is an error when creating. Try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -92,7 +107,13 @@ export const CategoryModal = (props: {
                   justifyContent="space-between"
                 >
                   {item.name}
-                  <CheckCircleIcon color="gray.500" />
+                  <CheckCircleIcon
+                    color={
+                      word.categories[0].category.name === item.name
+                        ? "blue.500"
+                        : "gray.500"
+                    }
+                  />
                 </ListItem>
               ))}
             </List>

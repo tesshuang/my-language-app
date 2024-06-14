@@ -71,6 +71,12 @@ export const TextResult = (props: {
       router.refresh();
     } catch (error) {
       console.error(error);
+      toast({
+        description: "There is an error while saving. Try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -80,7 +86,7 @@ export const TextResult = (props: {
       toast({
         description: "Translation copied successfully.",
         status: "success",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
       });
     } catch (error) {
@@ -88,7 +94,7 @@ export const TextResult = (props: {
       toast({
         description: "Translation copied failed.",
         status: "error",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }
