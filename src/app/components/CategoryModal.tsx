@@ -24,7 +24,6 @@ export const CategoryModal = (props: {
   word: Favorite;
 }) => {
   const { category, setCategory, word } = props;
-  console.log("🚀 ~ word:", word.categories);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [text, setText] = useState("");
@@ -100,22 +99,24 @@ export const CategoryModal = (props: {
               </Flex>
             )}
             <List spacing={3}>
-              {category.map((item, key) => (
-                <ListItem
-                  key={key}
-                  display="flex"
-                  justifyContent="space-between"
-                >
-                  {item.name}
-                  <CheckCircleIcon
-                    color={
-                      word.categories[0].category.name === item.name
-                        ? "blue.500"
-                        : "gray.500"
-                    }
-                  />
-                </ListItem>
-              ))}
+              {category.map((item, key) => {
+                return (
+                  <ListItem
+                    key={key}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    {item.name}
+                    <CheckCircleIcon
+                      color={
+                        word.categories[key]?.category?.name === item.name
+                          ? "blue.500"
+                          : "gray.500"
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
             </List>
           </ModalBody>
 

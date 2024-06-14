@@ -33,9 +33,7 @@ export const TranslateHome = (props: {
 }) => {
   const { favorites, categories } = props;
   const [allFavs, setAllFavs] = useState<Favorite[]>(favorites);
-  console.log("🚀 ~ favorites:", favorites);
   const [category, setCategory] = useState(categories);
-  console.log("🚀 ~ categories:", categories);
 
   useEffect(() => {
     if (favorites.length !== allFavs.length) {
