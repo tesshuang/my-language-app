@@ -26,13 +26,14 @@ model Favorite {
 model Category {
   id        Int                     @id @default(autoincrement())
   name      String                  @db.VarChar(255)
+  isDefault Boolean                 @default(false)
   favorites CategoriesOnFavorites[]
 }
 
 model CategoriesOnFavorites {
-  favorite   Favorite @relation(fields: [favoriteId], references: [id])
+  favorite   Favorite @relation(fields: [favoriteId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   favoriteId String // relation scalar field (used in the `@relation` attribute above)
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
 

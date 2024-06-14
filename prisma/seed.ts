@@ -9,6 +9,7 @@ async function main() {
     create: {
       id: 1,
       name: 'Favorites',
+      isDefault: true
     },
   })
 
