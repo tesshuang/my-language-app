@@ -16,5 +16,4 @@ export async function POST(request: Request) {
   })  
 
   return Response.json({data: category}, {status: 200})
- 
 }
