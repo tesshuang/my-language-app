@@ -17,6 +17,7 @@ import {
 import { Fragment, useState } from "react";
 import { CheckCircleIcon, InfoIcon } from "@chakra-ui/icons";
 import { Category, Favorite } from "./TranslateHome";
+import { useRouter } from "next/navigation";
 
 export const CategoryModal = (props: {
   category: Category[];
@@ -36,6 +37,7 @@ export const CategoryModal = (props: {
   const [categoryIds, setCategoryIds] = useState(getCategoryIds);
 
   const toast = useToast();
+  const router = useRouter();
 
   const handleCreateCategory = async () => {
     try {
@@ -69,6 +71,32 @@ export const CategoryModal = (props: {
       ? categoryIds.filter((categoryId) => categoryId !== id)
       : [...categoryIds, id];
     setCategoryIds(updated);
+  };
+
+  const handleUpdateCategory = async () => {
+    // TODO: if no change in categoryIds, no need make fetch
+    try {
+      const body = {
+        categoryIds: categoryIds,
+      };
+      const response = await fetch(`/api/favorite/${word.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      router.refresh();
+      console.log("🚀 ~ handleUpdateCategory ~ response:", response);
+    } catch (e) {
+      console.error(e);
+      toast({
+        description:
+          "There is an error when updating the category for this word. Try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    onClose();
   };
 
   return (
@@ -140,7 +168,7 @@ export const CategoryModal = (props: {
               display="block"
               margin="auto"
               colorScheme="blue"
-              onClick={onClose}
+              onClick={handleUpdateCategory}
             >
               Done
             </Button>

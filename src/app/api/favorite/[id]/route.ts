@@ -30,25 +30,50 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const data  = await request.json()
     const { categoryIds }: {categoryIds: number[]} = data
 
-    const createCategories = categoryIds.map(id => ({
-      assignedAt: new Date(),
-      category: {
-        connect: {
-          id: id,
-        },
+    // find all addedIds and removeIds
+    const unchangedIds: number[] = [];
+    const removeIds = [];
+    const existedIds = await prisma.categoriesOnFavorites.findMany({
+      where: {
+        favoriteId: id
       },
-    }));
-
-   const favorite = await prisma.favorite.update({
-      where: { id: id },
-      data: {
-        categories: {
-          create: createCategories,
-        }
+      select: {
+        categoryId: true
       }
     })
 
-    return Response.json(favorite)
+    for (let i = 0; i < existedIds.length; i++) {
+      if (categoryIds.includes(existedIds[i].categoryId)) {
+        unchangedIds.push(existedIds[i].categoryId);
+      } else {
+        removeIds.push(existedIds[i].categoryId);
+      }
+    }
+
+    const addIds = categoryIds.filter((number) => !unchangedIds.includes(number));
+
+    // create new records
+    const createCategories = addIds.map(categoryId => ({
+      favoriteId: id, 
+      categoryId: categoryId,
+      assignedAt: new Date(),
+    }));
+    await prisma.categoriesOnFavorites.createMany({
+      data: createCategories,
+    });
+
+    // deletes the records
+    const idsToDelete = removeIds.map(categoryId => ({
+      favoriteId: id,
+      categoryId: categoryId,
+    }))
+    await prisma.categoriesOnFavorites.deleteMany({
+      where: {
+        OR: idsToDelete,
+      },
+    });
+
+    return new Response("Success")
 
   } catch(e: any) {
     return new Response(`Delete favorite error: ${e.message}`, {
