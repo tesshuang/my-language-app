@@ -32,7 +32,6 @@ export const CategoryModal = (props: {
 
   const [text, setText] = useState("");
   const [isCreate, setIsCreate] = useState(false);
-  const [idChange, setIdChange] = useState(false);
   const [categoryIds, setCategoryIds] = useState(intialCategoryIds);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -71,19 +70,21 @@ export const CategoryModal = (props: {
       ? categoryIds.filter((categoryId) => categoryId !== id)
       : [...categoryIds, id];
     setCategoryIds(updated);
-
-    const sortedInitialIds = [...intialCategoryIds].sort();
-    const sortedUpdatedIds = [...updated].sort();
-    setIdChange(
-      !(JSON.stringify(sortedInitialIds) === JSON.stringify(sortedUpdatedIds))
-    );
   };
 
   const handleUpdateCategory = async () => {
-    if (idChange) {
+    const addCategoryIds = categoryIds.filter(
+      (number) => !intialCategoryIds.includes(number)
+    );
+    const removeCategoryIds = intialCategoryIds.filter(
+      (number) => !categoryIds.includes(number)
+    );
+
+    if (addCategoryIds.length !== 0 || removeCategoryIds.length !== 0) {
       try {
         const body = {
-          categoryIds: categoryIds,
+          addCategoryIds,
+          removeCategoryIds,
         };
         const response = await fetch(`/api/favorite/${word.id}`, {
           method: "PATCH",

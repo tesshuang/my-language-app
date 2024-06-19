@@ -29,27 +29,14 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 }
 
 // PATCH /api/favorite/:id
-// Required fields in body: categoryIds
+// Required fields in body: addcategoryIds, removeCategoryIds
 // updates the resource with the request category payload 
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try{
     const id = params.id
     const data  = await request.json()
-    const { categoryIds }: {categoryIds: number[]} = data
-
-    // find exist categories
-    const existedCategories = await prisma.categoriesOnFavorites.findMany({
-      where: {
-        favoriteId: id
-      },
-      select: {
-        categoryId: true
-      }
-    })
-    const existedCategoryIds = existedCategories.map(category => category.categoryId);
-    const addCategoryIds = categoryIds.filter(number => !existedCategoryIds.includes(number));
-    const removeCategoryIds = existedCategoryIds.filter(number => !categoryIds.includes(number));
+    const { addCategoryIds, removeCategoryIds }: { addCategoryIds: number[], removeCategoryIds: number[] } = data
 
     // create new records
     const createCategories = addCategoryIds.map(categoryId => ({
