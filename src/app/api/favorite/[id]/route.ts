@@ -7,11 +7,19 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   try{
     const id = params.id
 
-   const favorite = await prisma.favorite.delete({
+    // Delete all related record in relation table
+    await prisma.categoriesOnFavorites.deleteMany({
+      where: {
+        favoriteId: id, // ID of the favorite whose relations you want to delete
+      },
+    });
+
+    // Delete the record in favorite table
+   await prisma.favorite.delete({
       where: { id: id },
     })
 
-    return Response.json(favorite)
+    return new Response("Success")
 
   } catch(e: any) {
     return new Response(`Delete favorite error: ${e.message}`, {

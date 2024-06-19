@@ -44,12 +44,11 @@ export const FavoriteCard = (props: {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/api/favorite/${id}`, {
+      await fetch(`/api/favorite/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
       router.refresh();
-      console.log("response from handleDelete, ", response);
     } catch (e) {
       console.error("Error occurs when handleDelete", e);
     }
