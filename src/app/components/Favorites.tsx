@@ -11,10 +11,10 @@ export const Favorites = (props: {
     <div>
       {words.length !== 0 ? (
         <div>
-          {words.map((word, index) => {
+          {words.map((word) => {
             return (
               <FavoriteCard
-                key={index}
+                key={word.id}
                 word={word}
                 category={category}
                 setCategory={setCategory}

@@ -20,6 +20,7 @@ export async function POST(request: Request) {
             assignedAt: new Date(),
             category: {
               connect: {
+                // TODO: Replace constance value
                 id: 1,
               },
             },

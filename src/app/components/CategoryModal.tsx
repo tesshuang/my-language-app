@@ -148,10 +148,10 @@ export const CategoryModal = (props: {
               </Flex>
             )}
             <List spacing={3}>
-              {category.map((item, key) => {
+              {category.map((item) => {
                 return (
                   <ListItem
-                    key={key}
+                    key={item.id}
                     display="flex"
                     justifyContent="space-between"
                   >
