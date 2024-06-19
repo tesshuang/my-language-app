@@ -25,17 +25,17 @@ export const CategoryModal = (props: {
   word: Favorite;
 }) => {
   const { category, setCategory, word } = props;
-  console.log("🚀 ~ word.categories:", word.categories);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [text, setText] = useState("");
-  const [isCreate, setIsCreate] = useState(false);
-
-  const getCategoryIds: number[] = word.categories.map(
+  const intialCategoryIds: number[] = word.categories.map(
     (item) => item.category.id
   );
-  const [categoryIds, setCategoryIds] = useState(getCategoryIds);
 
+  const [text, setText] = useState("");
+  const [isCreate, setIsCreate] = useState(false);
+  const [idChange, setIdChange] = useState(false);
+  const [categoryIds, setCategoryIds] = useState(intialCategoryIds);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const router = useRouter();
 
@@ -71,30 +71,37 @@ export const CategoryModal = (props: {
       ? categoryIds.filter((categoryId) => categoryId !== id)
       : [...categoryIds, id];
     setCategoryIds(updated);
+
+    const sortedInitialIds = [...intialCategoryIds].sort();
+    const sortedUpdatedIds = [...updated].sort();
+    setIdChange(
+      !(JSON.stringify(sortedInitialIds) === JSON.stringify(sortedUpdatedIds))
+    );
   };
 
   const handleUpdateCategory = async () => {
-    // TODO: if no change in categoryIds, no need make fetch
-    try {
-      const body = {
-        categoryIds: categoryIds,
-      };
-      const response = await fetch(`/api/favorite/${word.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      router.refresh();
-      console.log("🚀 ~ handleUpdateCategory ~ response:", response);
-    } catch (e) {
-      console.error(e);
-      toast({
-        description:
-          "There is an error when updating the category for this word. Try again later.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+    if (idChange) {
+      try {
+        const body = {
+          categoryIds: categoryIds,
+        };
+        const response = await fetch(`/api/favorite/${word.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        router.refresh();
+        console.log("🚀 ~ handleUpdateCategory ~ response:", response);
+      } catch (e) {
+        console.error(e);
+        toast({
+          description:
+            "There is an error when updating the category for this word. Try again later.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
     onClose();
   };
