@@ -38,10 +38,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const data  = await request.json()
     const { categoryIds }: {categoryIds: number[]} = data
 
-    // find all addedIds and removeIds
-    const unchangedIds: number[] = [];
-    const removeIds = [];
-    const existedIds = await prisma.categoriesOnFavorites.findMany({
+    // find exist categories
+    const existedCategories = await prisma.categoriesOnFavorites.findMany({
       where: {
         favoriteId: id
       },
@@ -49,19 +47,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         categoryId: true
       }
     })
-
-    for (let i = 0; i < existedIds.length; i++) {
-      if (categoryIds.includes(existedIds[i].categoryId)) {
-        unchangedIds.push(existedIds[i].categoryId);
-      } else {
-        removeIds.push(existedIds[i].categoryId);
-      }
-    }
-
-    const addIds = categoryIds.filter((number) => !unchangedIds.includes(number));
+    const existedCategoryIds = existedCategories.map(category => category.categoryId);
+    const addCategoryIds = categoryIds.filter(number => !existedCategoryIds.includes(number));
+    const removeCategoryIds = existedCategoryIds.filter(number => !categoryIds.includes(number));
 
     // create new records
-    const createCategories = addIds.map(categoryId => ({
+    const createCategories = addCategoryIds.map(categoryId => ({
       favoriteId: id, 
       categoryId: categoryId,
       assignedAt: new Date(),
@@ -70,14 +61,14 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       data: createCategories,
     });
 
-    // deletes the records
-    const idsToDelete = removeIds.map(categoryId => ({
+    // delete records
+    const deleteCategories = removeCategoryIds.map(categoryId => ({
       favoriteId: id,
       categoryId: categoryId,
     }))
     await prisma.categoriesOnFavorites.deleteMany({
       where: {
-        OR: idsToDelete,
+        OR: deleteCategories,
       },
     });
 
