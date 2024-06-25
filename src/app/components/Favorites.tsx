@@ -23,7 +23,7 @@ export const Favorites = (props: {
           })}
         </div>
       ) : (
-        <div>No favourite words is saved.</div>
+        <div>No words is saved.</div>
       )}
     </div>
   );

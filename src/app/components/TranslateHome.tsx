@@ -1,5 +1,5 @@
 "use client";
-import { VStack, Heading } from "@chakra-ui/react";
+import { VStack, Heading, Button } from "@chakra-ui/react";
 import { Translation } from "./Translation";
 import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
@@ -50,16 +50,19 @@ export const TranslateHome = (props: {
         <Translation />
       </VStack>
       <section>
-        <Link href="/favorites">
-          <Heading as="h1" size="2xl" textDecoration="underline">
-            Favorites
-          </Heading>
-        </Link>
+        <Heading as="h1" size="2xl">
+          Favorites
+        </Heading>
         <Favorites
           words={allFavs}
           category={category}
           setCategory={setCategory}
         />
+        <Link href="/favorites">
+          <Button colorScheme="blue" margin="16px auto" display="block">
+            See all
+          </Button>
+        </Link>
       </section>
     </>
   );

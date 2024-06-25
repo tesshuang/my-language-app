@@ -5,6 +5,7 @@ import { TranslateHome } from "./components/TranslateHome";
 
 export default async function Home() {
   const allFavourites = await prisma.favorite.findMany({
+    take: 10,
     orderBy: {
       createdAt: "desc",
     },
@@ -27,7 +28,6 @@ export default async function Home() {
   });
 
   const categories = await prisma.category.findMany();
-  console.log("allFavourites from prisma, ", allFavourites);
 
   return (
     <VStack as="main" align="stretch" p={4}>
