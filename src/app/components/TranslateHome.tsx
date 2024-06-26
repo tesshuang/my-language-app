@@ -36,10 +36,8 @@ export const TranslateHome = (props: {
   const [category, setCategory] = useState(categories);
 
   useEffect(() => {
-    if (favorites.length !== allFavs.length) {
-      setAllFavs(favorites);
-    }
-  }, [allFavs.length, favorites]);
+    setAllFavs(favorites);
+  }, [favorites]);
 
   return (
     <>
