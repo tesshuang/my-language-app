@@ -4,11 +4,12 @@ import {
   Textarea,
   Flex,
   HStack,
+  IconButton,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { useState } from "react";
-import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
+import { handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
 
 export const TextInput = (props: {
@@ -55,28 +56,35 @@ export const TextInput = (props: {
           />
           {Boolean(text) && (
             <HStack mt={2} spacing="8px" alignItems="flex-start">
-              <CloseIcon
-                boxSize={5}
-                focusable={true}
-                bgColor="gray.500"
-                color="gray.100"
-                borderRadius="50%"
-                p={1}
-                aria-label="reset text input"
+              <IconButton
+                isRound={true}
+                minW={"min-content"}
+                height={"fit-content"}
+                colorScheme={"white"}
+                aria-label={"reset text input"}
+                icon={
+                  <CloseIcon
+                    boxSize={5}
+                    p={1}
+                    bgColor="gray.500"
+                    color="gray.100"
+                    borderRadius="50%"
+                  />
+                }
                 onClick={handleRest}
-                onKeyDown={(e) => {
-                  handleEnterKey(e, handleRest);
-                }}
-                tabIndex={0}
               />
-              <PlayIcon
-                isPlaying={isPlaying}
+              <IconButton
+                isRound={true}
+                minW={"min-content"}
+                height={"fit-content"}
+                colorScheme={"white"}
+                aria-label={
+                  isPlaying
+                    ? "pause the speaking"
+                    : "play the sound of the word"
+                }
+                icon={<PlayIcon isPlaying={isPlaying} />}
                 onClick={() => handleSpeechSynthesis(text, code, setIsPlaying)}
-                onKeyDown={(e) => {
-                  handleEnterKey(e, () =>
-                    handleSpeechSynthesis(text, code, setIsPlaying)
-                  );
-                }}
               />
             </HStack>
           )}

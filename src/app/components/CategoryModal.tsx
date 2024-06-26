@@ -13,9 +13,10 @@ import {
   Input,
   Flex,
   useToast,
+  IconButton,
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
-import { CheckCircleIcon, InfoIcon } from "@chakra-ui/icons";
+import { CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { Category, Favorite } from "./TranslateHome";
 import { useRouter } from "next/navigation";
 
@@ -109,10 +110,14 @@ export const CategoryModal = (props: {
 
   return (
     <Fragment>
-      <InfoIcon
-        tabIndex={0}
-        color="gray.500"
-        aria-label="update the status"
+      <IconButton
+        isRound={true}
+        minW={"min-content"}
+        height={"fit-content"}
+        variant="solid"
+        colorScheme={"white"}
+        aria-label={"update the word status"}
+        icon={<InfoIcon color="gray.500" />}
         onClick={onOpen}
       />
 
@@ -156,13 +161,17 @@ export const CategoryModal = (props: {
                     justifyContent="space-between"
                   >
                     {item.name}
-                    <CheckCircleIcon
-                      color={
-                        categoryIds.includes(item.id) ? "blue.500" : "gray.500"
+                    <IconButton
+                      isRound={true}
+                      size="xs"
+                      variant="solid"
+                      colorScheme={
+                        categoryIds.includes(item.id) ? "blue" : "gray"
                       }
                       aria-label={`${word.userInput} is${
                         categoryIds.includes(item.id) ? "" : " not"
                       } in category ${item.name}.`}
+                      icon={<CheckIcon />}
                       onClick={() => handleCategoryIds(item.id)}
                     />
                   </ListItem>

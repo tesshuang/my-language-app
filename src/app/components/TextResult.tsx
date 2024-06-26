@@ -1,8 +1,8 @@
-import { Text, Box, Flex } from "@chakra-ui/react";
+import { Text, Box, Flex, IconButton } from "@chakra-ui/react";
 import { StarIcon, CopyIcon } from "@chakra-ui/icons";
 import { PlayIcon } from "./PlayIcon";
 import { useEffect, useState } from "react";
-import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
+import { handleSpeechSynthesis } from "../utils/helpers";
 import type { Content } from "./Translation";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -119,40 +119,42 @@ export const TextResult = (props: {
 
         <Box mt={2}>
           {Boolean(result) && (
-            <PlayIcon
-              isPlaying={isPlaying}
+            <IconButton
+              isRound={true}
+              minW={"min-content"}
+              height={"fit-content"}
+              colorScheme={"white"}
+              aria-label={
+                isPlaying ? "pause the speaking" : "play the sound of the word"
+              }
+              icon={<PlayIcon isPlaying={isPlaying} />}
               onClick={() =>
                 handleSpeechSynthesis(result, outputCode, setIsPlaying)
               }
-              onKeyDown={(e) => {
-                handleEnterKey(e, () =>
-                  handleSpeechSynthesis(result, outputCode, setIsPlaying)
-                );
-              }}
             />
           )}
         </Box>
       </Flex>
       {Boolean(userInput) && (
         <>
-          <StarIcon
-            color="gray.500"
+          <IconButton
+            isRound={true}
+            minW={"min-content"}
+            height={"fit-content"}
+            mr={"2"}
+            colorScheme={"white"}
             aria-label="add this word to favorite collection"
+            icon={<StarIcon color="gray.500" />}
             onClick={addToFavorties}
-            onKeyDown={(e) => {
-              handleEnterKey(e, addToFavorties);
-            }}
-            tabIndex={0}
-            mr="2"
           />
-          <CopyIcon
-            color="gray.500"
+          <IconButton
+            isRound={true}
+            minW={"min-content"}
+            height={"fit-content"}
+            colorScheme={"white"}
             aria-label="copy this word to clipboard"
-            tabIndex={0}
+            icon={<CopyIcon color="gray.500" />}
             onClick={handleCopy}
-            onKeyDown={(e) => {
-              handleEnterKey(e, handleCopy);
-            }}
           />
         </>
       )}

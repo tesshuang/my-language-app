@@ -1,9 +1,9 @@
-import { Box, Text, Divider, Flex } from "@chakra-ui/react";
+import { Box, Text, Divider, Flex, IconButton } from "@chakra-ui/react";
 import { Category, Favorite } from "./TranslateHome";
 import { PlayIcon } from "./PlayIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import { handleEnterKey, handleSpeechSynthesis } from "../utils/helpers";
+import { handleSpeechSynthesis } from "../utils/helpers";
 import { useRouter } from "next/navigation";
 import { CategoryModal } from "./CategoryModal";
 
@@ -20,14 +20,16 @@ const WordContent = (props: { lang: string; word: string }) => {
           {word}
         </Text>
       </Box>
-      <PlayIcon
-        isPlaying={isPlaying}
+      <IconButton
+        isRound={true}
+        minW={"min-content"}
+        height={"fit-content"}
+        colorScheme={"white"}
+        aria-label={
+          isPlaying ? "pause the speaking" : "play the sound of the word"
+        }
+        icon={<PlayIcon isPlaying={isPlaying} />}
         onClick={() => handleSpeechSynthesis(word, lang, setIsPlaying)}
-        onKeyDown={(e) => {
-          handleEnterKey(e, () =>
-            handleSpeechSynthesis(word, lang, setIsPlaying)
-          );
-        }}
       />
     </Flex>
   );
@@ -58,15 +60,15 @@ export const FavoriteCard = (props: {
       <WordContent lang={inputLang} word={userInput} />
       <Divider borderColor="gray.500" my={2} />
       <WordContent lang={translationLang} word={translation} />
-      <StarIcon
-        tabIndex={0}
-        color="blue.500"
-        mr="2"
+      <IconButton
+        isRound={true}
+        minW={"min-content"}
+        height={"fit-content"}
+        mr={"2"}
+        colorScheme={"white"}
         aria-label="remove this word from favorite collection"
+        icon={<StarIcon color="blue.500" />}
         onClick={() => handleDelete(id)}
-        onKeyDown={(e) => {
-          handleEnterKey(e, () => handleDelete(id));
-        }}
       />
       <CategoryModal
         category={category}

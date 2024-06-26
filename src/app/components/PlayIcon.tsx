@@ -1,11 +1,7 @@
 import { Icon } from "@chakra-ui/react";
 
-export const PlayIcon = (props: {
-  isPlaying: boolean;
-  onClick: () => void;
-  onKeyDown: (event: any) => void;
-}) => {
-  const { isPlaying, onClick, onKeyDown } = props;
+export const PlayIcon = (props: { isPlaying: boolean }) => {
+  const { isPlaying } = props;
 
   return (
     <Icon
@@ -18,12 +14,6 @@ export const PlayIcon = (props: {
       height="5"
       viewBox="0 0 408.221 408.221"
       xmlSpace="preserve"
-      aria-label={
-        isPlaying ? "pause the speaking" : "play the sound of the word"
-      }
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      tabIndex={0}
     >
       <g>
         {isPlaying ? (

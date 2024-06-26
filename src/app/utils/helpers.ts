@@ -47,9 +47,3 @@ export const handleSpeechSynthesis = (
     setIsPlaying(false);
   };
 };
-
-export const handleEnterKey = (e: any, func: any) => {
-  if (e.key === "Enter") {
-    func()
-  }
-}
