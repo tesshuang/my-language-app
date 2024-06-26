@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Box, AbsoluteCenter } from "@chakra-ui/react";
+import { Box, AbsoluteCenter, IconButton } from "@chakra-ui/react";
 import { TextInput } from "./TextInput";
 import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import { TextResult } from "./TextResult";
@@ -104,14 +104,20 @@ export const Translation = (props: {}) => {
         handleTextInput={handleTextInput}
       />
       <AbsoluteCenter axis="both" zIndex={1}>
-        <ArrowUpDownIcon
-          boxSize={10}
-          focusable={true}
-          bgColor="gray.800"
-          color="gray.100"
-          borderRadius="50%"
-          p={2}
-          aria-label="switch the tranlsation"
+        <IconButton
+          isRound={true}
+          minW={"min-content"}
+          height={"fit-content"}
+          colorScheme={"white"}
+          aria-label={"switch the tranlsation"}
+          icon={
+            <ArrowUpDownIcon
+              boxSize={10}
+              bgColor="gray.800"
+              borderRadius="50%"
+              p={2}
+            />
+          }
           onClick={handleSwitchLang}
         />
       </AbsoluteCenter>
