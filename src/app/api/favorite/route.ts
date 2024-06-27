@@ -32,6 +32,23 @@ export async function POST(request: Request) {
 
   return new Response('Success!', {
     status: 200,
-  })
- 
+  });
+}
+
+// DELETE /api/favorite
+// delete all items in favorite table
+
+export async function DELETE(request: Request) {
+  try{
+
+    // Delete all related record in favorite table
+    await prisma.favorite.deleteMany({});
+
+    return new Response("Success delete all words.");
+
+  } catch(e: any) {
+    return new Response(`Delete favorite error: ${e.message}`, {
+      status: 400,
+    });
+  }
 }
