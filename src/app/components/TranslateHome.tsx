@@ -56,11 +56,13 @@ export const TranslateHome = (props: {
           category={category}
           setCategory={setCategory}
         />
-        <Link href="/favorites">
-          <Button colorScheme="blue" margin="16px auto" display="block">
-            See all
-          </Button>
-        </Link>
+        {allFavs.length !== 0 && (
+          <Link href="/favorites">
+            <Button colorScheme="blue" margin="16px auto" display="block">
+              See all
+            </Button>
+          </Link>
+        )}
       </section>
     </>
   );
