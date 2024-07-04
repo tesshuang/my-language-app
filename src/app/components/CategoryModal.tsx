@@ -41,13 +41,10 @@ export const CategoryModal = (props: {
 
   const handleCreateCategory = async () => {
     try {
-      const body = {
-        name: text,
-      };
       const response = await fetch(`/api/category`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ name: text }),
       });
 
       const { data }: { data: Category } = await response.json();
@@ -87,13 +84,12 @@ export const CategoryModal = (props: {
           addCategoryIds,
           removeCategoryIds,
         };
-        const response = await fetch(`/api/favorite/${word.id}`, {
+        await fetch(`/api/favorite/${word.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
         router.refresh();
-        console.log("🚀 ~ handleUpdateCategory ~ response:", response);
       } catch (e) {
         console.error(e);
         toast({
@@ -105,6 +101,11 @@ export const CategoryModal = (props: {
         });
       }
     }
+    onClose();
+  };
+
+  const handleOnClose = () => {
+    setCategoryIds(intialCategoryIds);
     onClose();
   };
 
@@ -121,7 +122,11 @@ export const CategoryModal = (props: {
         onClick={onOpen}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInBottom">
+      <Modal
+        isOpen={isOpen}
+        onClose={handleOnClose}
+        motionPreset="slideInBottom"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add to category</ModalHeader>
@@ -132,7 +137,7 @@ export const CategoryModal = (props: {
               variant="outline"
               display="block"
               margin="auto"
-              onClick={() => setIsCreate(true)}
+              onClick={() => setIsCreate(!isCreate)}
             >
               New category
             </Button>
