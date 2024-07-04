@@ -27,7 +27,7 @@ export const FavoritesHome = (props: {
   const { favorites, categories } = props;
 
   const [category, setCategory] = useState(categories);
-  const [selectedId, setSelectedId] = useState<null | number>(null);
+  const [selectedId, setSelectedId] = useState<null | number>(1);
 
   // Update categories when changes
   useEffect(() => {
@@ -73,8 +73,9 @@ export const FavoritesHome = (props: {
               size="md"
               key={item.id}
               variant="solid"
-              colorScheme="blue"
+              colorScheme={`${selectedId === item.id ? "blue" : "gray"}`}
               borderRadius="full"
+              mr={1}
             >
               <button onClick={() => setSelectedId(item.id)}>
                 {item.name}
@@ -120,7 +121,7 @@ export const FavoritesHome = (props: {
       </HStack>
 
       <Favorites
-        words={selectedId ? selectedWords : favorites}
+        words={selectedWords}
         category={category}
         setCategory={setCategory}
       />
