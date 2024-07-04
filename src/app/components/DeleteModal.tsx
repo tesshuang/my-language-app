@@ -9,12 +9,12 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 
 export const DeleteModal = (props: {
   triggerLabel: string;
   modalHeader: string;
-  modalContent: string;
+  modalContent: string | ReactNode;
   onDelete: () => Promise<void>;
 }) => {
   const { triggerLabel, modalHeader, modalContent, onDelete } = props;

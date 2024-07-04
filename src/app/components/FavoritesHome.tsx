@@ -3,6 +3,8 @@ import {
   Box,
   HStack,
   IconButton,
+  List,
+  ListItem,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -16,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
 import type { Category, Favorite } from "./TranslateHome";
-import { SettingsIcon } from "@chakra-ui/icons";
+import { CheckIcon, SettingsIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
 import { DeleteModal } from "./DeleteModal";
 
@@ -28,6 +30,7 @@ export const FavoritesHome = (props: {
 
   const [category, setCategory] = useState(categories);
   const [selectedId, setSelectedId] = useState<null | number>(1);
+  const [deleteIds, setDeleteIds] = useState<number[]>([]);
 
   // Update categories when changes
   useEffect(() => {
@@ -38,6 +41,10 @@ export const FavoritesHome = (props: {
     Boolean(
       word.categories.find((category) => category.category.id === selectedId)
     )
+  );
+
+  const deletableCategories = category.filter(
+    (item) => item.name !== "Favorites"
   );
 
   const router = useRouter();
@@ -53,6 +60,7 @@ export const FavoritesHome = (props: {
     }
   };
 
+  //TODO: Update delete logic with ids
   const handleDeleteAllCategories = async () => {
     try {
       await fetch(`/api/category`, {
@@ -99,7 +107,7 @@ export const FavoritesHome = (props: {
           <PopoverContent>
             <PopoverArrow />
             <PopoverCloseButton />
-            <PopoverHeader>Settings</PopoverHeader>
+            <PopoverHeader fontWeight={"bold"}>Settings</PopoverHeader>
             <PopoverBody>
               <VStack spacing={"4"} alignItems={"flex-start"} p={"2"}>
                 <DeleteModal
@@ -109,9 +117,36 @@ export const FavoritesHome = (props: {
                   onDelete={handleDeleteAllWords}
                 />
                 <DeleteModal
-                  triggerLabel="Clear all categories"
-                  modalHeader="Clear all categories"
-                  modalContent="This action will remove all saved categories from your account."
+                  triggerLabel="Manage categories"
+                  modalHeader="Delete the following categories"
+                  modalContent={
+                    <List spacing={3}>
+                      {deletableCategories.map((item) => {
+                        return (
+                          <ListItem
+                            key={item.id}
+                            display="flex"
+                            justifyContent="space-between"
+                          >
+                            {item.name}
+                            <IconButton
+                              isRound={true}
+                              size="xs"
+                              variant="solid"
+                              colorScheme={
+                                deleteIds.includes(item.id) ? "blue" : "gray"
+                              }
+                              aria-label={`Update ${item.name} status`}
+                              icon={<CheckIcon />}
+                              onClick={() => {
+                                setDeleteIds([...deleteIds, item.id]);
+                              }}
+                            />
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                  }
                   onDelete={handleDeleteAllCategories}
                 />
               </VStack>
