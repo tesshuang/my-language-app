@@ -1,16 +1,8 @@
 "use client";
 import {
   Box,
-  Button,
   HStack,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -20,13 +12,13 @@ import {
   PopoverTrigger,
   Tag,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Favorites } from "./Favorites";
 import type { Category, Favorite } from "./TranslateHome";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
+import { DeleteModal } from "./DeleteModal";
 
 export const FavoritesHome = (props: {
   favorites: Favorite[];
@@ -37,13 +29,17 @@ export const FavoritesHome = (props: {
   const [category, setCategory] = useState(categories);
   const [selectedId, setSelectedId] = useState<null | number>(null);
 
+  // Update categories when changes
+  useEffect(() => {
+    setCategory(categories);
+  }, [categories]);
+
   const selectedWords = favorites.filter((word) =>
     Boolean(
       word.categories.find((category) => category.category.id === selectedId)
     )
   );
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
   const handleDeleteAllWords = async () => {
@@ -52,9 +48,19 @@ export const FavoritesHome = (props: {
         method: "DELETE",
       });
       router.refresh();
-      onClose();
     } catch (e) {
       console.error("Error occurs when handleDeleteAllWords", e);
+    }
+  };
+
+  const handleDeleteAllCategories = async () => {
+    try {
+      await fetch(`/api/category`, {
+        method: "DELETE",
+      });
+      router.refresh();
+    } catch (e) {
+      console.error("Error occurs when handleDeleteAllCategories", e);
     }
   };
 
@@ -95,12 +101,18 @@ export const FavoritesHome = (props: {
             <PopoverHeader>Settings</PopoverHeader>
             <PopoverBody>
               <VStack spacing={"4"} alignItems={"flex-start"} p={"2"}>
-                <Button colorScheme="blue" variant="link" onClick={onOpen}>
-                  Clear all saved
-                </Button>
-                <Button colorScheme="blue" variant="link" onClick={onOpen}>
-                  Clear all categories
-                </Button>
+                <DeleteModal
+                  triggerLabel="Clear all saved"
+                  modalHeader="Clear all saved"
+                  modalContent="This action will remove all saved words from your account."
+                  onDelete={handleDeleteAllWords}
+                />
+                <DeleteModal
+                  triggerLabel="Clear all categories"
+                  modalHeader="Clear all categories"
+                  modalContent="This action will remove all saved categories from your account."
+                  onDelete={handleDeleteAllCategories}
+                />
               </VStack>
             </PopoverBody>
           </PopoverContent>
@@ -112,26 +124,6 @@ export const FavoritesHome = (props: {
         category={category}
         setCategory={setCategory}
       />
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete all words</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            This action will remove all saved words from your account.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleDeleteAllWords}>
-              Delete
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </VStack>
   );
 };
