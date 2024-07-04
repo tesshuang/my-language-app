@@ -5,7 +5,6 @@ import prisma from '../../utils/prisma'
 
 export async function POST(request: Request) {
   const data  = await request.json()
-  console.log("data", data)
 
   const { name } = data
   
@@ -18,19 +17,24 @@ export async function POST(request: Request) {
   return Response.json({data: category}, {status: 200})
 }
 
+// DELETE /api/category
+// Required fields in body: ids
 export async function DELETE(request: Request) {
   try{
+    const data  = await request.json();
 
-    // Delete all related record in category table
+    const { ids } = data;
+
+    // Delete selected records in category table
     await prisma.category.deleteMany({
       where: {
-        name: {
-          not: 'Favorites',
-        },
+        id: {
+          in: ids
+        }
       },
     });
 
-    return new Response("Successfully delete all categories.");
+    return new Response("Successfully categories by ids.");
 
   } catch(e: any) {
     return new Response(`Delete favorite error: ${e.message}`, {
