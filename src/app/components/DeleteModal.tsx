@@ -16,13 +16,19 @@ export const DeleteModal = (props: {
   modalHeader: string;
   modalContent: string | ReactNode;
   onDelete: () => Promise<void>;
+  onClear?: () => void;
 }) => {
-  const { triggerLabel, modalHeader, modalContent, onDelete } = props;
+  const { triggerLabel, modalHeader, modalContent, onDelete, onClear } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleDelete = () => {
     onDelete();
+    onClose();
+  };
+
+  const handleOnClose = () => {
+    onClear?.();
     onClose();
   };
 
@@ -32,7 +38,7 @@ export const DeleteModal = (props: {
         {triggerLabel}
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleOnClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{modalHeader}</ModalHeader>
@@ -43,7 +49,7 @@ export const DeleteModal = (props: {
             <Button colorScheme="blue" mr={3} onClick={handleDelete}>
               Delete
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={handleOnClose}>
               Cancel
             </Button>
           </ModalFooter>

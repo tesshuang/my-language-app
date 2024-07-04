@@ -60,11 +60,14 @@ export const FavoritesHome = (props: {
     }
   };
 
-  //TODO: Update delete logic with ids
-  const handleDeleteAllCategories = async () => {
+  const handleDeleteAllCategories = async (ids: number[]) => {
     try {
       await fetch(`/api/category`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids }),
       });
       router.refresh();
     } catch (e) {
@@ -118,7 +121,7 @@ export const FavoritesHome = (props: {
                 />
                 <DeleteModal
                   triggerLabel="Manage categories"
-                  modalHeader="Delete the following categories"
+                  modalHeader="Delete categories"
                   modalContent={
                     <List spacing={3}>
                       {deletableCategories.map((item) => {
@@ -139,7 +142,12 @@ export const FavoritesHome = (props: {
                               aria-label={`Update ${item.name} status`}
                               icon={<CheckIcon />}
                               onClick={() => {
-                                setDeleteIds([...deleteIds, item.id]);
+                                const updated = deleteIds.includes(item.id)
+                                  ? deleteIds.filter(
+                                      (deleteId) => deleteId !== item.id
+                                    )
+                                  : [...deleteIds, item.id];
+                                setDeleteIds(updated);
                               }}
                             />
                           </ListItem>
@@ -147,7 +155,8 @@ export const FavoritesHome = (props: {
                       })}
                     </List>
                   }
-                  onDelete={handleDeleteAllCategories}
+                  onDelete={() => handleDeleteAllCategories(deleteIds)}
+                  onClear={() => setDeleteIds([])}
                 />
               </VStack>
             </PopoverBody>
