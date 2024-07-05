@@ -4,17 +4,17 @@ import prisma from '../../utils/prisma'
 // Required fields in body: name
 
 export async function POST(request: Request) {
-  const data  = await request.json()
+  const data  = await request.json();
 
-  const { name } = data
+  const { name } = data;
   
-  const category = await prisma.category.create({
+  await prisma.category.create({
     data: {
       name,
     }
-  })  
+  });
 
-  return Response.json({data: category}, {status: 200})
+  return new Response("Successfully add new category.");
 }
 
 // DELETE /api/category
@@ -34,7 +34,7 @@ export async function DELETE(request: Request) {
       },
     });
 
-    return new Response("Successfully categories by ids.");
+    return new Response("Successfully delete categories by ids.");
 
   } catch(e: any) {
     return new Response(`Delete favorite error: ${e.message}`, {

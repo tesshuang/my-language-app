@@ -4,21 +4,15 @@ import { FavoriteCard } from "./FavoriteCard";
 export const Favorites = (props: {
   words: Favorite[];
   category: Category[];
-  setCategory: (category: Category[]) => void;
 }) => {
-  const { words, category, setCategory } = props;
+  const { words, category } = props;
   return (
     <div>
       {words.length !== 0 ? (
         <div>
           {words.map((word) => {
             return (
-              <FavoriteCard
-                key={word.id}
-                word={word}
-                category={category}
-                setCategory={setCategory}
-              />
+              <FavoriteCard key={word.id} word={word} category={category} />
             );
           })}
         </div>

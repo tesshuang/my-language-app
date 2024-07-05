@@ -22,10 +22,9 @@ import { useRouter } from "next/navigation";
 
 export const CategoryModal = (props: {
   category: Category[];
-  setCategory: (category: Category[]) => void;
   word: Favorite;
 }) => {
-  const { category, setCategory, word } = props;
+  const { category, word } = props;
 
   const intialCategoryIds: number[] = word.categories.map(
     (item) => item.category.id
@@ -41,17 +40,15 @@ export const CategoryModal = (props: {
 
   const handleCreateCategory = async () => {
     try {
-      const response = await fetch(`/api/category`, {
+      await fetch(`/api/category`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: text }),
       });
 
-      const { data }: { data: Category } = await response.json();
-
-      setCategory([...category, data]);
       setText("");
       setIsCreate(false);
+      router.refresh();
     } catch (e) {
       console.error(e);
       toast({

@@ -164,11 +164,7 @@ export const FavoritesHome = (props: {
         </Popover>
       </HStack>
 
-      <Favorites
-        words={selectedWords}
-        category={category}
-        setCategory={setCategory}
-      />
+      <Favorites words={selectedWords} category={category} />
     </VStack>
   );
 };

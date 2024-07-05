@@ -38,9 +38,8 @@ const WordContent = (props: { lang: string; word: string }) => {
 export const FavoriteCard = (props: {
   word: Favorite;
   category: Category[];
-  setCategory: (category: Category[]) => void;
 }) => {
-  const { word, category, setCategory } = props;
+  const { word, category } = props;
   const { id, inputLang, userInput, translationLang, translation } = word;
   const router = useRouter();
 
@@ -70,11 +69,7 @@ export const FavoriteCard = (props: {
         icon={<StarIcon color="blue.500" />}
         onClick={() => handleDelete(id)}
       />
-      <CategoryModal
-        category={category}
-        setCategory={setCategory}
-        word={word}
-      />
+      <CategoryModal category={category} word={word} />
     </Box>
   );
 };

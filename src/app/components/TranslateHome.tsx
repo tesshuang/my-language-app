@@ -39,6 +39,10 @@ export const TranslateHome = (props: {
     setAllFavs(favorites);
   }, [favorites]);
 
+  useEffect(() => {
+    setCategory(categories);
+  }, [categories]);
+
   return (
     <>
       <VStack spacing={4} align="stretch">
@@ -51,11 +55,7 @@ export const TranslateHome = (props: {
         <Heading as="h1" size="2xl">
           Favorites
         </Heading>
-        <Favorites
-          words={allFavs}
-          category={category}
-          setCategory={setCategory}
-        />
+        <Favorites words={allFavs} category={category} />
         {allFavs.length !== 0 && (
           <Link href="/favorites">
             <Button colorScheme="blue" margin="16px auto" display="block">
